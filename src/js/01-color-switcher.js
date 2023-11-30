@@ -1,47 +1,30 @@
-import Notiflix from 'notiflix';
+const refs = {
+  btnStart: document.querySelector('button[data-start]'),
+  btnStop: document.querySelector('button[data-stop]'),
+  body: document.querySelector('body'),
+};
 
-function createPromise(position, delay) {
-  return new Promise((resolve, reject) => {
-    const shouldResolve = Math.random() > 0.3;
+let colorInterval = 0;
 
-    setTimeout(() => {
-      const result = { position, delay };
+refs.btnStart.addEventListener('click', startColorChange);
+refs.btnStop.addEventListener('click', stopColorChange);
 
-      if (shouldResolve) {
-        resolve(result); 
-      } else {
-        reject(result); 
-      }
-    }, delay);
-  });
+function getRandomHexColor() {
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, 0)}`;
 }
 
-document.querySelector('.form').addEventListener('submit', function (event) {
-  event.preventDefault();
+function startColorChange() {
+  refs.btnStart.disabled = true;
+  refs.btnStop.disabled = false;
+  colorInterval = setInterval(() => {
+    refs.body.style.backgroundColor = getRandomHexColor();
+  }, 100);
+}
 
-  const delay = +this.elements.delay.value; // Початкова затримка
-  const step = +this.elements.step.value; // Крок збільшення затримки
-  const amount = +this.elements.amount.value; // Кількість промісів
-
-  // Перевірка, щоб уникнути від'ємних значень
-  if (delay <= 0 || step <= 0 || amount <= 0) {
-    Notiflix.Notify.failure('Please enter positive values.');
-    return;
-  }
-
-  Notiflix.Notify.closeAll();
-
-  for (let i = 1; i <= amount; i++) {
-    createPromise(i, delay + (i - 1) * step)
-      .then(({ position, delay }) => {
-        Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position} in ${delay}ms`
-        );
-      })
-      .catch(({ position, delay }) => {
-        Notiflix.Notify.failure(
-          `❌ Rejected promise ${position} in ${delay}ms`
-        );
-      });
-  }
-});
+function stopColorChange() {
+  refs.btnStart.disabled = false;
+  refs.btnStop.disabled = true;
+  clearInterval(colorInterval);
+}
