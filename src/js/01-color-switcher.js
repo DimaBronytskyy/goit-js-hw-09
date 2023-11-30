@@ -8,15 +8,14 @@ function createPromise(position, delay) {
       const result = { position, delay };
 
       if (shouldResolve) {
-        resolve(result); // Виконано проміс
+        resolve(result); 
       } else {
-        reject(result); // Відхилено проміс
+        reject(result); 
       }
     }, delay);
   });
 }
 
-// Обробка події сабміту форми
 document.querySelector('.form').addEventListener('submit', function (event) {
   event.preventDefault();
 
@@ -30,10 +29,8 @@ document.querySelector('.form').addEventListener('submit', function (event) {
     return;
   }
 
-  // Очистка попередніх повідомлень
   Notiflix.Notify.closeAll();
 
-  // Створення та обробка промісів
   for (let i = 1; i <= amount; i++) {
     createPromise(i, delay + (i - 1) * step)
       .then(({ position, delay }) => {
