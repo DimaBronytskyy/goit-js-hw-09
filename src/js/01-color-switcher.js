@@ -4,30 +4,27 @@ const refs = {
   body: document.querySelector('body'),
 };
 
-let colorInterval = null;
+let colorInterval;
+refs.btnStop.disabled = true;
 
-refs.btnStart.addEventListener('click', startColorChange);
-refs.btnStop.addEventListener('click', stopColorChange);
+refs.btnStart.addEventListener('click', Start);
+refs.btnStop.addEventListener('click', Stop);
 
-function getRandomHexColor() {
-  return `#${Math.floor(Math.random() * 16777215)
-    .toString(16)
-    .padStart(6, '0')}`;
-}
-
-function startColorChange() {
+function Start() {
   refs.btnStart.disabled = true;
   refs.btnStop.disabled = false;
 
-  // Очистити попередній інтервал перед створенням нового
-  clearInterval(colorInterval);
-
   colorInterval = setInterval(() => {
+    function getRandomHexColor() {
+      return `#${Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, 0)}`;
+    }
     refs.body.style.backgroundColor = getRandomHexColor();
   }, 100);
 }
 
-function stopColorChange() {
+function Stop() {
   refs.btnStart.disabled = false;
   refs.btnStop.disabled = true;
   clearInterval(colorInterval);
