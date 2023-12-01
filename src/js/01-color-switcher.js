@@ -7,25 +7,29 @@ const refs = {
 let colorInterval;
 refs.btnStop.disabled = true;
 
-refs.btnStart.addEventListener('click', Start);
-refs.btnStop.addEventListener('click', Stop);
+refs.btnStart.addEventListener('click', startColorChange);
+refs.btnStop.addEventListener('click', stopColorChange);
 
-function Start() {
-  refs.btnStart.disabled = true;
-  refs.btnStop.disabled = false;
+function startColorChange() {
+  toggleButtons(true, false);
 
   colorInterval = setInterval(() => {
-    function getRandomHexColor() {
-      return `#${Math.floor(Math.random() * 16777215)
-        .toString(16)
-        .padStart(6, 0)}`;
-    }
     refs.body.style.backgroundColor = getRandomHexColor();
-  }, 100);
+  }, 1000);// але так скушно
 }
 
-function Stop() {
-  refs.btnStart.disabled = false;
-  refs.btnStop.disabled = true;
+function stopColorChange() {
+  toggleButtons(false, true);
   clearInterval(colorInterval);
+}
+
+function toggleButtons(startDisabled, stopDisabled) {
+  refs.btnStart.disabled = startDisabled;
+  refs.btnStop.disabled = stopDisabled;
+}
+
+function getRandomHexColor() {
+  return `#${Math.floor(Math.random() * 16777215)
+    .toString(16)
+    .padStart(6, '0')}`;
 }

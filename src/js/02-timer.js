@@ -26,8 +26,9 @@ flatpickr(refs.input, {
   minuteIncrement: 1,
   onClose(selectedDates) {
     futureDay = selectedDates[0].getTime();
-    currentDay = new Date();
+    currentDay = Date.now();
     if (futureDay - currentDay < 1000) {
+      refs.btn.disabled = true;
       Notiflix.Notify.info('Please choose a date in the future');
     } else {
       refs.btn.removeAttribute('disabled');
@@ -38,7 +39,7 @@ flatpickr(refs.input, {
 
 function onClick() {
   id = setInterval(() => {
-    currentDay = new Date().getTime();
+    currentDay = Date.now();
     if (futureDay - currentDay < 1000) {
       Notiflix.Notify.info('The time is up!');
       clearInterval(id);
